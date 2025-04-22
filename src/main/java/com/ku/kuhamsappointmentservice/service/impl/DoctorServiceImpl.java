@@ -33,6 +33,10 @@ public class DoctorServiceImpl implements DoctorService {
                 .collect(Collectors.toList());
     }
 
+    public List<Doctor> searchDoctors(String keyword) {
+        return doctorRepository.searchByKeyword(keyword);
+    }
+
     private DoctorDto mapToDto(Doctor doctor) {
         return new DoctorDto(doctor.getId(), doctor.getFullName(), doctor.getSpecialization());
     }

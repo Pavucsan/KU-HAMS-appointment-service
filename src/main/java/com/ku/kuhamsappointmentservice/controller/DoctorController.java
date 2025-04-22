@@ -1,6 +1,7 @@
 package com.ku.kuhamsappointmentservice.controller;
 
 import com.ku.kuhamsappointmentservice.dto.DoctorDto;
+import com.ku.kuhamsappointmentservice.entity.Doctor;
 import com.ku.kuhamsappointmentservice.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,11 @@ public class DoctorController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String speciality) {
         return ResponseEntity.ok(doctorService.searchDoctors(name, speciality));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Doctor>> searchDoctors(@RequestParam("keyword") String keyword) {
+        List<Doctor> result = doctorService.searchDoctors(keyword);
+        return ResponseEntity.ok(result);
     }
 }
