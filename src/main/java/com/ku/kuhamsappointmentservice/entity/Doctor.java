@@ -1,8 +1,10 @@
 package com.ku.kuhamsappointmentservice.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "doctors")
 public class Doctor {
 
@@ -31,6 +33,4 @@ public class Doctor {
 
     @Column(name = "availability_end")
     private String availabilityEnd;
-
-    // Getters and Setters
 }
