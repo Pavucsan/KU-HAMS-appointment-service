@@ -1,8 +1,10 @@
 package com.ku.kuhamsappointmentservice.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "patients")
 public class Patient {
 

@@ -1,16 +1,21 @@
 package com.ku.kuhamsappointmentservice.controller;
 
+import com.ku.kuhamsappointmentservice.dto.request.AppointmentBookingRequest;
 import com.ku.kuhamsappointmentservice.dto.request.AppointmentDTO;
 import com.ku.kuhamsappointmentservice.entity.Appointment;
 import com.ku.kuhamsappointmentservice.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/admin")
 public class AppointmentController {
 
@@ -25,11 +30,26 @@ public class AppointmentController {
 
     // Endpoint to book a new appointment
     @PostMapping("/book")
-    public Appointment bookAppointment(@RequestParam Long patientId,
-                                       @RequestParam Long doctorId,
-                                       @RequestParam String dateTime) {
-        LocalDateTime appointmentDateTime = LocalDateTime.parse(dateTime);
-        return appointmentService.bookAppointment(patientId, doctorId, appointmentDateTime);
+    public ResponseEntity<?> bookAppointment(@RequestBody AppointmentBookingRequest request) {
+        try {
+            LocalDateTime appointmentDateTime = LocalDateTime.parse(
+                    request.getDateTime(),
+                    DateTimeFormatter.ISO_LOCAL_DATE_TIME
+            );
+
+            Appointment appointment = appointmentService.bookAppointment(
+                    request.getPatientId(),
+                    request.getDoctorId(),
+                    appointmentDateTime
+            );
+
+            return ResponseEntity.ok(appointment);
+
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().body("Invalid date format. Please use ISO format: yyyy-MM-dd'T'HH:mm:ss");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Booking failed: " + ex.getMessage());
+        }
     }
 
     // Endpoint to get all appointments for a patient

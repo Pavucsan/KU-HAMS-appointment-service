@@ -5,15 +5,13 @@ import com.ku.kuhamsappointmentservice.entity.Doctor;
 import com.ku.kuhamsappointmentservice.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/doctors")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class DoctorController {
 
@@ -31,7 +29,7 @@ public class DoctorController {
         return ResponseEntity.ok(doctorService.searchDoctors(name, speciality));
     }
 
-    @GetMapping("/search")
+    @GetMapping("/key/search")
     public ResponseEntity<List<Doctor>> searchDoctors(@RequestParam("keyword") String keyword) {
         List<Doctor> result = doctorService.searchDoctors(keyword);
         return ResponseEntity.ok(result);
