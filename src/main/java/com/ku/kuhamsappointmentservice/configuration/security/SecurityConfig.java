@@ -33,12 +33,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/public/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html")
+                                "/swagger-ui.html",
+                                "/api/doctors/**", "/api/patients")
                         .permitAll()       // Your public endpoints
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // ✅ Proper CORS injection
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .build();
     }
 

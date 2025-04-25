@@ -30,6 +30,4 @@ public class Patient {
 
     @Column(name = "email")
     private String email;
-
-    // Getters and Setters
 }

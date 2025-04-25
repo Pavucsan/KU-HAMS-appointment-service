@@ -1,9 +1,11 @@
 package com.ku.kuhamsappointmentservice.controller;
 
 import com.ku.kuhamsappointmentservice.dto.DoctorDto;
+import com.ku.kuhamsappointmentservice.dto.request.DoctorCreateRequest;
 import com.ku.kuhamsappointmentservice.entity.Doctor;
 import com.ku.kuhamsappointmentservice.service.DoctorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,5 +35,20 @@ public class DoctorController {
     public ResponseEntity<List<Doctor>> searchDoctors(@RequestParam("keyword") String keyword) {
         List<Doctor> result = doctorService.searchDoctors(keyword);
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/api/doctors")
+    public ResponseEntity<Void> createDoctor(@RequestBody DoctorCreateRequest r) {
+        doctorService.createDoctor(
+                r.userId(), r.username(), r.specialization(),
+                r.phoneNumber(), r.email(), r.availabilityStart(), r.availabilityEnd()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Doctor> getDoctorById(@PathVariable Long id) {
+        Doctor doctor = doctorService.getDoctorById(id);
+        return ResponseEntity.ok(doctor);
     }
 }

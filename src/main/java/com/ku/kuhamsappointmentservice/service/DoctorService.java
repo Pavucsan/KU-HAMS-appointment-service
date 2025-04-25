@@ -10,4 +10,6 @@ public interface DoctorService {
 
     public List<DoctorDto> searchDoctors(String name, String speciality);
     public List<Doctor> searchDoctors(String keyword);
+    public void createDoctor(Long userId, String username, String speciality, String phone, String email, String start, String end);
+    public Doctor getDoctorById(Long id);
 }
