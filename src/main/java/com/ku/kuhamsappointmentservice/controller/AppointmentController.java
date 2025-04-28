@@ -2,6 +2,7 @@ package com.ku.kuhamsappointmentservice.controller;
 
 import com.ku.kuhamsappointmentservice.dto.request.AppointmentBookingRequest;
 import com.ku.kuhamsappointmentservice.dto.request.AppointmentDTO;
+import com.ku.kuhamsappointmentservice.dto.response.ResponseWrapper;
 import com.ku.kuhamsappointmentservice.entity.Appointment;
 import com.ku.kuhamsappointmentservice.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,6 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
-    // Endpoint to book a new appointment
     @PostMapping("/book")
     public ResponseEntity<?> bookAppointment(@RequestBody AppointmentBookingRequest request) {
         try {
@@ -43,12 +43,16 @@ public class AppointmentController {
                     appointmentDateTime
             );
 
-            return ResponseEntity.ok(appointment);
+            // Return the response wrapped with status and message
+            ResponseWrapper successResponse = new ResponseWrapper("success", "Appointment booked successfully", appointment);
+            return ResponseEntity.ok(successResponse);
 
         } catch (DateTimeParseException e) {
-            return ResponseEntity.badRequest().body("Invalid date format. Please use ISO format: yyyy-MM-dd'T'HH:mm:ss");
+            ResponseWrapper errorResponse = new ResponseWrapper("error", "Invalid date format. Please use ISO format: yyyy-MM-dd'T'HH:mm:ss");
+            return ResponseEntity.badRequest().body(errorResponse);
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Booking failed: " + ex.getMessage());
+            ResponseWrapper errorResponse = new ResponseWrapper("error", "Booking failed: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
